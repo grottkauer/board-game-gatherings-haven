@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,6 +53,28 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Custom board game app colors
+				"board-purple": {
+					DEFAULT: "#9b87f5",
+					light: "#c6bcfa",
+					dark: "#7e69ab"
+				},
+				"board-green": {
+					DEFAULT: "#e1f5e0",
+					light: "#f2fce2"
+				},
+				"board-orange": {
+					DEFAULT: "#ffa270",
+					light: "#fec6a1"
+				},
+				"board-cream": {
+					DEFAULT: "#fffbf2",
+					dark: "#f7eed7"
+				},
+				"board-slate": {
+					DEFAULT: "#2d3748",
+					light: "#4a5568"
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +107,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 6s ease-in-out infinite'
+			},
+			fontFamily: {
+				'game': ['Quicksand', 'sans-serif'],
+				'display': ['Poppins', 'sans-serif']
 			}
 		}
 	},

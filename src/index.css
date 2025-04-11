@@ -1,68 +1,64 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 40 100% 97%;
+    --foreground: 222 25% 23%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 40 100% 97%;
+    --card-foreground: 222 25% 23%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 40 100% 97%;
+    --popover-foreground: 222 25% 23%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 255 82% 75%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 135 52% 92%;
+    --secondary-foreground: 222 25% 23%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 23 100% 72%;
+    --accent-foreground: 222 25% 23%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 255 82% 85%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 255 82% 75%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 25% 23%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 25% 23%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 25% 23%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 255 82% 75%;
+    --primary-foreground: 222 25% 23%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -70,8 +66,8 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 23 100% 72%;
+    --accent-foreground: 222 25% 23%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -96,6 +92,32 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-board-cream text-board-slate font-game;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-board-purple text-white hover:bg-board-purple-dark rounded-full px-6 py-2 transition-all shadow-md hover:shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-board-green text-board-slate hover:bg-board-green-light rounded-full px-6 py-2 transition-all;
+  }
+  
+  .game-card {
+    @apply bg-white rounded-2xl shadow-md hover:shadow-lg transition-all p-4 border border-board-purple-light;
+  }
+  
+  .filter-chip {
+    @apply bg-white border border-board-purple-light rounded-full px-4 py-1 text-sm text-board-slate-light hover:bg-board-purple hover:text-white transition-all cursor-pointer;
+  }
+  
+  .filter-chip.active {
+    @apply bg-board-purple text-white;
   }
 }
