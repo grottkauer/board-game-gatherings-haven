@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
-import { Users, LogOut, User, Dice, Menu, X } from "lucide-react";
+import { Users, LogOut, User, Dice1, Menu, X } from "lucide-react";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -24,7 +23,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm py-3">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
-          <Dice className="h-6 w-6 text-board-purple" />
+          <Dice1 className="h-6 w-6 text-board-purple" />
           <h1 className="text-xl font-bold text-board-slate">
             Board<span className="text-board-purple">Haven</span>
           </h1>

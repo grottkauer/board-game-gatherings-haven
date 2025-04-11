@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/contexts/EventContext";
@@ -9,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
+import { Game } from "@/types";
 
 const CreateEvent = () => {
   const { createEvent } = useEvents();
@@ -47,8 +47,12 @@ const CreateEvent = () => {
       return;
     }
     
-    const games = gameTitle.trim() 
-      ? [{ title: gameTitle, description: gameDescription.trim() || undefined }] 
+    const games: Game[] = gameTitle.trim() 
+      ? [{ 
+          id: crypto.randomUUID(), 
+          title: gameTitle, 
+          description: gameDescription.trim() || undefined 
+        }] 
       : [];
     
     createEvent({

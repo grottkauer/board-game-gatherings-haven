@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Dice } from "lucide-react";
+import { Dice1 } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -40,7 +39,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg">
         <div className="text-center mb-6">
           <Link to="/" className="inline-flex items-center gap-2 justify-center">
-            <Dice className="h-8 w-8 text-board-purple" />
+            <Dice1 className="h-8 w-8 text-board-purple" />
             <h1 className="text-2xl font-bold text-board-slate">
               Board<span className="text-board-purple">Haven</span>
             </h1>
