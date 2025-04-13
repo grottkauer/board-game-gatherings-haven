@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEvents } from "@/contexts/EventContext";
@@ -7,6 +6,7 @@ import Header from "@/components/Header";
 import EventChat from "@/components/EventChat";
 import EventRating from "@/components/EventRating";
 import GameResults from "@/components/GameResults";
+import GamesSection from "@/components/GamesSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -165,7 +165,6 @@ const EventDetail = () => {
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
             {isEditing ? (
-              // Edit Form
               <div className="space-y-4">
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-2xl font-bold text-board-purple">Edit Event</h2>
@@ -265,7 +264,6 @@ const EventDetail = () => {
                 </div>
               </div>
             ) : (
-              // Event Display
               <>
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -402,102 +400,11 @@ const EventDetail = () => {
             )}
           </div>
           
+          <div className="mb-6">
+            <GamesSection eventId={eventId} isCompleted={!!event?.isCompleted} />
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Game Section */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-board-slate">Games</h2>
-                
-                {(isHost || isParticipant) && !event.isCompleted && (
-                  <Button 
-                    variant="outline" 
-                    className="rounded-full"
-                    onClick={() => setShowAddGame(!showAddGame)}
-                  >
-                    {showAddGame ? (
-                      <>
-                        <X className="h-4 w-4 mr-2" />
-                        Cancel
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Game
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-              
-              {showAddGame && (
-                <div className="bg-board-cream/50 p-4 rounded-lg mb-6">
-                  <h3 className="font-medium mb-3">Add a Game</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label htmlFor="gameTitle" className="text-sm font-medium block mb-1">
-                        Game Title *
-                      </label>
-                      <Input
-                        id="gameTitle"
-                        value={newGameTitle}
-                        onChange={(e) => setNewGameTitle(e.target.value)}
-                        placeholder="e.g. Catan, Ticket to Ride"
-                        className="rounded-lg"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="gameDescription" className="text-sm font-medium block mb-1">
-                        Description (optional)
-                      </label>
-                      <Textarea
-                        id="gameDescription"
-                        value={newGameDescription}
-                        onChange={(e) => setNewGameDescription(e.target.value)}
-                        placeholder="Brief description of the game or which version/expansion you'll bring"
-                        className="rounded-lg min-h-24"
-                      />
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <Button
-                        className="bg-board-purple hover:bg-board-purple-dark rounded-lg"
-                        onClick={handleAddGame}
-                      >
-                        Add Game
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="rounded-lg"
-                        onClick={() => setShowAddGame(false)}
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {event.games.length > 0 ? (
-                <div className="space-y-4">
-                  {event.games.map((game, index) => (
-                    <div key={index} className="p-4 border border-board-purple-light rounded-lg">
-                      <h3 className="font-medium text-lg text-board-purple">{game.title}</h3>
-                      {game.description && <p className="text-board-slate-light mt-1">{game.description}</p>}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-board-slate-light">No games added yet.</p>
-                  {(isHost || isParticipant) && !event.isCompleted && (
-                    <p className="mt-2 text-sm">Be the first to add a game!</p>
-                  )}
-                </div>
-              )}
-            </div>
-            
-            {/* Game Results or Ratings */}
             {event.isCompleted ? (
               <EventRating 
                 eventId={eventId} 
@@ -515,7 +422,6 @@ const EventDetail = () => {
             )}
           </div>
           
-          {/* Display game results if event is completed */}
           {event.isCompleted && gameResults.length > 0 && (
             <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
               <h2 className="text-2xl font-bold text-board-slate mb-4">Game Results</h2>
@@ -531,7 +437,6 @@ const EventDetail = () => {
         </div>
       </main>
       
-      {/* Event Chat (fixed position) */}
       {(isHost || isParticipant) && (
         <EventChat eventId={eventId} messages={chatMessages} />
       )}

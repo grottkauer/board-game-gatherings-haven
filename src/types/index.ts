@@ -4,7 +4,7 @@ export interface User {
   email: string;
   nickname: string;
   city: string;
-  photoUrl?: string;
+  photoUrl: string; // Changed from optional to required
   isLoggedIn: boolean;
 }
 
