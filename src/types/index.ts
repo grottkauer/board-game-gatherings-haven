@@ -27,6 +27,34 @@ export interface Participant {
   nickname: string;
 }
 
+export interface ChatMessage {
+  id: string;
+  eventId: string;
+  senderId: string;
+  senderNickname: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface EventRating {
+  id: string;
+  userId: string;
+  userNickname: string;
+  rating: number;
+  comment?: string;
+  timestamp: string;
+}
+
+export interface GameResult {
+  id: string;
+  gameId: string;
+  gameTitle: string;
+  winnerId?: string;
+  winnerNickname?: string;
+  players: Participant[];
+  timestamp: string;
+}
+
 export interface Event {
   id: string;
   name: string;
@@ -41,4 +69,8 @@ export interface Event {
   };
   participants: Participant[];
   games: Game[];
+  isCompleted?: boolean;
+  chatMessages?: ChatMessage[];
+  ratings?: EventRating[];
+  gameResults?: GameResult[];
 }

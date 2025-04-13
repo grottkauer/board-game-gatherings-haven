@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState } from "react";
-import { Event, Game, Participant } from "@/types";
+import { Event, Game, Participant, ChatMessage, EventRating, GameResult } from "@/types";
 import { useAuth } from "./AuthContext";
 import { toast } from "sonner";
 
@@ -33,7 +33,10 @@ const initialEvents: Event[] = [
     ],
     games: [
       { id: "101", title: "Catan", description: "The classic game of resource management and trading" }
-    ]
+    ],
+    chatMessages: [],
+    ratings: [],
+    gameResults: []
   },
   {
     id: "2",
@@ -52,7 +55,10 @@ const initialEvents: Event[] = [
     ],
     games: [
       { id: "102", title: "Pandemic", description: "A cooperative game of disease control" }
-    ]
+    ],
+    chatMessages: [],
+    ratings: [],
+    gameResults: []
   },
   {
     id: "3",
@@ -73,7 +79,10 @@ const initialEvents: Event[] = [
     games: [
       { id: "103", title: "Terraforming Mars", description: "Compete to make Mars habitable" },
       { id: "104", title: "Scythe", description: "Alternate-history strategy game set in 1920s Europe" }
-    ]
+    ],
+    chatMessages: [],
+    ratings: [],
+    gameResults: []
   }
 ];
 
@@ -89,6 +98,11 @@ interface EventContextType {
   leaveEvent: (eventId: string) => void;
   addGame: (eventId: string, game: Omit<Game, "id">) => void;
   getEvent: (eventId: string) => Event | undefined;
+  updateEvent: (eventId: string, updates: Partial<Event>) => void;
+  sendChatMessage: (eventId: string, message: string) => void;
+  rateEvent: (eventId: string, rating: number, comment?: string) => void;
+  addGameResult: (eventId: string, gameResult: Omit<GameResult, "id" | "timestamp">) => void;
+  markEventComplete: (eventId: string) => void;
 }
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -133,7 +147,10 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       },
       participants: [
         { id: user.id, nickname: user.nickname }
-      ]
+      ],
+      chatMessages: [],
+      ratings: [],
+      gameResults: []
     };
     
     setEvents([...events, createdEvent]);
@@ -165,6 +182,19 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           ...event,
           participants: [...event.participants, { id: user.id, nickname: user.nickname }]
         };
+        
+        // Send a notification chat message
+        if (updatedEvent.chatMessages) {
+          const notification: ChatMessage = {
+            id: `chat-${Date.now()}`,
+            eventId: event.id,
+            senderId: "system",
+            senderNickname: "System",
+            message: `${user.nickname} has joined the event!`,
+            timestamp: new Date().toISOString()
+          };
+          updatedEvent.chatMessages = [...updatedEvent.chatMessages, notification];
+        }
         
         toast.success("You have joined the event!");
         return updatedEvent;
@@ -198,6 +228,19 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           ...event,
           participants: event.participants.filter(p => p.id !== user.id)
         };
+        
+        // Send a notification chat message
+        if (updatedEvent.chatMessages) {
+          const notification: ChatMessage = {
+            id: `chat-${Date.now()}`,
+            eventId: event.id,
+            senderId: "system",
+            senderNickname: "System",
+            message: `${user.nickname} has left the event.`,
+            timestamp: new Date().toISOString()
+          };
+          updatedEvent.chatMessages = [...updatedEvent.chatMessages, notification];
+        }
         
         toast.success("You have left the event");
         return updatedEvent;
@@ -238,6 +281,176 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }));
   };
 
+  const updateEvent = (eventId: string, updates: Partial<Event>) => {
+    if (!user) {
+      toast.error("You must be logged in to update an event");
+      return;
+    }
+    
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        // Check if user is the host
+        if (event.host.id !== user.id) {
+          toast.error("Only the host can update this event");
+          return event;
+        }
+        
+        // Update the event
+        const updatedEvent = {
+          ...event,
+          ...updates
+        };
+        
+        toast.success("Event updated successfully!");
+        return updatedEvent;
+      }
+      return event;
+    }));
+  };
+
+  const sendChatMessage = (eventId: string, message: string) => {
+    if (!user) {
+      toast.error("You must be logged in to send messages");
+      return;
+    }
+    
+    if (!message.trim()) {
+      return;
+    }
+    
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        // Check if user is a participant
+        if (!event.participants.some(p => p.id === user.id)) {
+          toast.error("You must be part of the event to chat");
+          return event;
+        }
+        
+        const newMessage: ChatMessage = {
+          id: `chat-${Date.now()}`,
+          eventId,
+          senderId: user.id,
+          senderNickname: user.nickname,
+          message: message.trim(),
+          timestamp: new Date().toISOString()
+        };
+        
+        const updatedEvent = {
+          ...event,
+          chatMessages: [...(event.chatMessages || []), newMessage]
+        };
+        
+        return updatedEvent;
+      }
+      return event;
+    }));
+  };
+
+  const rateEvent = (eventId: string, rating: number, comment?: string) => {
+    if (!user) {
+      toast.error("You must be logged in to rate an event");
+      return;
+    }
+    
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        // Check if user is a participant
+        if (!event.participants.some(p => p.id === user.id)) {
+          toast.error("You must have participated in the event to rate it");
+          return event;
+        }
+        
+        // Check if event is completed
+        if (!event.isCompleted) {
+          toast.error("You can only rate events that have been completed");
+          return event;
+        }
+        
+        // Check if user has already rated
+        if (event.ratings && event.ratings.some(r => r.userId === user.id)) {
+          toast.error("You have already rated this event");
+          return event;
+        }
+        
+        const newRating: EventRating = {
+          id: `rating-${Date.now()}`,
+          userId: user.id,
+          userNickname: user.nickname,
+          rating,
+          comment,
+          timestamp: new Date().toISOString()
+        };
+        
+        const updatedEvent = {
+          ...event,
+          ratings: [...(event.ratings || []), newRating]
+        };
+        
+        toast.success("Thank you for rating this event!");
+        return updatedEvent;
+      }
+      return event;
+    }));
+  };
+
+  const addGameResult = (eventId: string, gameResult: Omit<GameResult, "id" | "timestamp">) => {
+    if (!user) {
+      toast.error("You must be logged in to record game results");
+      return;
+    }
+    
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        // Check if user is a participant or host
+        if (!event.participants.some(p => p.id === user.id)) {
+          toast.error("You must be part of the event to record results");
+          return event;
+        }
+        
+        const newGameResult: GameResult = {
+          ...gameResult,
+          id: `result-${Date.now()}`,
+          timestamp: new Date().toISOString()
+        };
+        
+        const updatedEvent = {
+          ...event,
+          gameResults: [...(event.gameResults || []), newGameResult]
+        };
+        
+        toast.success("Game result recorded!");
+        return updatedEvent;
+      }
+      return event;
+    }));
+  };
+
+  const markEventComplete = (eventId: string) => {
+    if (!user) {
+      toast.error("You must be logged in to mark an event as complete");
+      return;
+    }
+    
+    setEvents(events.map(event => {
+      if (event.id === eventId) {
+        // Check if user is the host
+        if (event.host.id !== user.id) {
+          toast.error("Only the host can mark the event as complete");
+          return event;
+        }
+        
+        const updatedEvent = {
+          ...event,
+          isCompleted: true
+        };
+        
+        toast.success("Event marked as complete!");
+        return updatedEvent;
+      }
+      return event;
+    }));
+  };
+
   const getEvent = (eventId: string) => {
     return events.find(event => event.id === eventId);
   };
@@ -255,7 +468,12 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         joinEvent,
         leaveEvent,
         addGame,
-        getEvent
+        getEvent,
+        updateEvent,
+        sendChatMessage,
+        rateEvent,
+        addGameResult,
+        markEventComplete
       }}
     >
       {children}
