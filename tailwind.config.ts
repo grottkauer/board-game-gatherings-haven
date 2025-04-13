@@ -61,11 +61,13 @@ export default {
 				},
 				"board-green": {
 					DEFAULT: "#e1f5e0",
-					light: "#f2fce2"
+					light: "#f2fce2",
+					dark: "#c1d6c0"
 				},
 				"board-orange": {
 					DEFAULT: "#ffa270",
-					light: "#fec6a1"
+					light: "#fec6a1",
+					dark: "#d98760"
 				},
 				"board-cream": {
 					DEFAULT: "#fffbf2",

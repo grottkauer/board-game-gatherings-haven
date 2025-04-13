@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { Users, LogOut, User, Dice1, Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -20,18 +22,18 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm py-3">
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-card/80 backdrop-blur-md shadow-sm py-3">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
           <Dice1 className="h-6 w-6 text-board-purple" />
-          <h1 className="text-xl font-bold text-board-slate">
+          <h1 className="text-xl font-bold text-board-slate dark:text-white">
             Board<span className="text-board-purple">Haven</span>
           </h1>
         </Link>
 
         {/* Mobile menu button */}
         <button 
-          className="md:hidden text-board-slate" 
+          className="md:hidden text-board-slate dark:text-white" 
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? (
@@ -43,12 +45,14 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-board-slate-light hover:text-board-purple transition-colors">
+          <Link to="/" className="text-board-slate-light hover:text-board-purple transition-colors dark:text-gray-300 dark:hover:text-board-purple">
             Home
           </Link>
-          <Link to="/events" className="text-board-slate-light hover:text-board-purple transition-colors">
+          <Link to="/events" className="text-board-slate-light hover:text-board-purple transition-colors dark:text-gray-300 dark:hover:text-board-purple">
             Events
           </Link>
+          
+          <ThemeToggle />
           
           {user ? (
             <Popover>
@@ -98,22 +102,28 @@ const Header = () => {
 
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-md md:hidden">
+          <div className="absolute top-full left-0 right-0 bg-white dark:bg-card shadow-md md:hidden">
             <div className="flex flex-col p-4 gap-4">
               <Link 
                 to="/" 
-                className="text-board-slate-light hover:text-board-purple transition-colors py-2"
+                className="text-board-slate-light hover:text-board-purple transition-colors dark:text-gray-300 dark:hover:text-board-purple py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Home
               </Link>
               <Link 
                 to="/events" 
-                className="text-board-slate-light hover:text-board-purple transition-colors py-2"
+                className="text-board-slate-light hover:text-board-purple transition-colors dark:text-gray-300 dark:hover:text-board-purple py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Events
               </Link>
+              <div className="flex items-center">
+                <ThemeToggle />
+                <span className="ml-2 text-sm">
+                  {ThemeToggle ? "Dark Mode" : "Light Mode"}
+                </span>
+              </div>
               <Separator />
               {user ? (
                 <>

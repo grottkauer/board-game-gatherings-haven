@@ -48,13 +48,13 @@
   }
 
   .dark {
-    --background: 222 25% 23%;
+    --background: 222 25% 15%;
     --foreground: 210 40% 98%;
 
-    --card: 222 25% 23%;
+    --card: 222 25% 17%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222 25% 23%;
+    --popover: 222 25% 17%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 255 82% 75%;
@@ -72,7 +72,7 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 217.2 32.6% 20.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --sidebar-background: 240 5.9% 10%;
@@ -92,7 +92,7 @@
   }
 
   body {
-    @apply bg-board-cream text-board-slate font-game;
+    @apply bg-background text-foreground font-game;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -106,15 +106,15 @@
   }
   
   .btn-secondary {
-    @apply bg-board-green text-board-slate hover:bg-board-green-light rounded-full px-6 py-2 transition-all;
+    @apply bg-board-green text-board-slate hover:bg-board-green-light rounded-full px-6 py-2 transition-all dark:bg-board-green-dark dark:text-white;
   }
   
   .game-card {
-    @apply bg-white rounded-2xl shadow-md hover:shadow-lg transition-all p-4 border border-board-purple-light;
+    @apply bg-white dark:bg-card rounded-2xl shadow-md hover:shadow-lg transition-all p-4 border border-board-purple-light dark:border-board-purple-dark;
   }
   
   .filter-chip {
-    @apply bg-white border border-board-purple-light rounded-full px-4 py-1 text-sm text-board-slate-light hover:bg-board-purple hover:text-white transition-all cursor-pointer;
+    @apply bg-white dark:bg-card border border-board-purple-light dark:border-board-purple-dark rounded-full px-4 py-1 text-sm text-board-slate-light hover:bg-board-purple hover:text-white transition-all cursor-pointer;
   }
   
   .filter-chip.active {

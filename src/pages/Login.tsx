@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -35,28 +36,28 @@ const Login = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-board-cream p-4">
-      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-board-cream dark:bg-background p-4">
+      <div className="w-full max-w-md p-8 bg-white dark:bg-card rounded-2xl shadow-lg">
         <div className="text-center mb-6">
           <Link to="/" className="inline-flex items-center gap-2 justify-center">
             <Dice1 className="h-8 w-8 text-board-purple" />
-            <h1 className="text-2xl font-bold text-board-slate">
+            <h1 className="text-2xl font-bold text-board-slate dark:text-white">
               Board<span className="text-board-purple">Haven</span>
             </h1>
           </Link>
-          <h2 className="text-xl font-medium mt-2">Welcome back!</h2>
-          <p className="text-board-slate-light">Log in to your account</p>
+          <h2 className="text-xl font-medium mt-2 dark:text-white">Welcome back!</h2>
+          <p className="text-board-slate-light dark:text-gray-300">Log in to your account</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg text-sm">
               {error}
             </div>
           )}
           
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
+            <label htmlFor="email" className="text-sm font-medium dark:text-gray-200">
               Email
             </label>
             <Input
@@ -65,14 +66,14 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
-              className="rounded-lg"
+              className="rounded-lg dark:bg-card dark:border-gray-700"
               required
             />
           </div>
           
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium dark:text-gray-200">
                 Password
               </label>
               <Link to="/forgot-password" className="text-xs text-board-purple hover:underline">
@@ -85,7 +86,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="********"
-              className="rounded-lg"
+              className="rounded-lg dark:bg-card dark:border-gray-700"
               required
             />
           </div>
@@ -100,7 +101,7 @@ const Login = () => {
         </form>
         
         <div className="text-center mt-6">
-          <p className="text-sm text-board-slate-light">
+          <p className="text-sm text-board-slate-light dark:text-gray-300">
             Don't have an account?{" "}
             <Link to="/register" className="text-board-purple hover:underline">
               Sign up
@@ -108,7 +109,7 @@ const Login = () => {
           </p>
         </div>
         
-        <div className="mt-6 text-center text-xs text-board-slate-light">
+        <div className="mt-6 text-center text-xs text-board-slate-light dark:text-gray-400">
           <p>Demo Account:</p>
           <p>Email: john@example.com</p>
           <p>Password: password123</p>
