@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, FriendRequest } from "@/types";
 import { toast } from "sonner";
@@ -18,12 +17,11 @@ interface AuthContextType {
   declineFriendRequest: (requestId: string) => Promise<void>;
 }
 
-// Mock user data for demo purposes
 const mockUsers = [
   {
     id: "1",
     email: "john@example.com",
-    password: "password123", // In a real app, passwords would be hashed and not stored in the frontend
+    password: "password123",
     nickname: "JohnDice",
     city: "New York",
     photoUrl: "https://source.unsplash.com/random/150x150/?person,1",
@@ -67,24 +65,23 @@ const mockUsers = [
   }
 ];
 
-// Mock friend relationships
 const mockFriendships = [
   {
     id: "1",
-    user1Id: "1", // John
-    user2Id: "2", // Alice
+    user1Id: "1",
+    user2Id: "2",
     status: "accepted"
   },
   {
     id: "2",
-    user1Id: "1", // John
-    user2Id: "3", // Mike
+    user1Id: "1",
+    user2Id: "3",
     status: "pending"
   },
   {
     id: "3",
-    user1Id: "4", // Sarah
-    user2Id: "1", // John
+    user1Id: "4",
+    user2Id: "1",
     status: "pending"
   }
 ];
@@ -98,13 +95,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
 
   useEffect(() => {
-    // Check for saved user data in localStorage on app load
     const savedUser = localStorage.getItem("boardGameUser");
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
       
-      // Load friends and friend requests
       if (parsedUser) {
         loadFriendsAndRequests(parsedUser.id);
       }
@@ -113,12 +108,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const loadFriendsAndRequests = (userId: string) => {
-    // Get accepted friendships
     const acceptedFriendships = mockFriendships.filter(
       f => (f.user1Id === userId || f.user2Id === userId) && f.status === "accepted"
     );
     
-    // Get friend user objects
     const friendIds = acceptedFriendships.map(f => 
       f.user1Id === userId ? f.user2Id : f.user1Id
     );
@@ -126,7 +119,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const friendsList = mockUsers.filter(u => friendIds.includes(u.id));
     setFriends(friendsList);
     
-    // Get pending friend requests
     const incomingRequests = mockFriendships
       .filter(f => f.user2Id === userId && f.status === "pending")
       .map(f => ({
@@ -143,10 +135,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Find user with matching email and password
     const foundUser = mockUsers.find(u => u.email === email && u.password === password);
     
     if (foundUser) {
@@ -155,7 +145,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(loggedInUser);
       localStorage.setItem("boardGameUser", JSON.stringify(loggedInUser));
       
-      // Load friends and requests
       loadFriendsAndRequests(loggedInUser.id);
       
       toast.success("Login successful!");
@@ -169,10 +158,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = async (): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // Mock Google login with a random user from our mock users
     const randomIndex = Math.floor(Math.random() * mockUsers.length);
     const randomUser = mockUsers[randomIndex];
     
@@ -182,7 +169,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(loggedInUser);
     localStorage.setItem("boardGameUser", JSON.stringify(loggedInUser));
     
-    // Load friends and requests
     loadFriendsAndRequests(loggedInUser.id);
     
     toast.success("Google login successful!");
@@ -192,17 +178,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (email: string, password: string, nickname: string, city: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Check if email already exists
     if (mockUsers.some(u => u.email === email)) {
       toast.error("Email already in use");
       setIsLoading(false);
       return;
     }
     
-    // Create new user
     const newUser: User & { password: string } = {
       id: (mockUsers.length + 1).toString(),
       email,
@@ -234,7 +217,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateProfile = async (nickname: string, city: string, photoUrl?: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     if (user) {
@@ -248,7 +230,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(updatedUser);
       localStorage.setItem("boardGameUser", JSON.stringify(updatedUser));
       
-      // Also update user in our mock data
       const userIndex = mockUsers.findIndex(u => u.id === user.id);
       if (userIndex !== -1) {
         mockUsers[userIndex] = { 
@@ -268,7 +249,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const sendFriendRequest = async (userId: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
     if (!user) {
@@ -277,7 +257,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     
-    // Check if friendship already exists
     const existingFriendship = mockFriendships.find(
       f => (f.user1Id === user.id && f.user2Id === userId) || 
            (f.user1Id === userId && f.user2Id === user.id)
@@ -293,7 +272,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     
-    // Create new friend request
     const newFriendRequest = {
       id: (mockFriendships.length + 1).toString(),
       user1Id: user.id,
@@ -310,10 +288,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const acceptFriendRequest = async (requestId: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    // Find the request
     const requestIndex = mockFriendships.findIndex(f => f.id === requestId);
     
     if (requestIndex === -1) {
@@ -322,10 +298,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     
-    // Update the request status
     mockFriendships[requestIndex].status = "accepted";
     
-    // Reload friends and requests
     if (user) {
       loadFriendsAndRequests(user.id);
     }
@@ -337,10 +311,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const declineFriendRequest = async (requestId: string): Promise<void> => {
     setIsLoading(true);
     
-    // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    // Find and remove the request
     const requestIndex = mockFriendships.findIndex(f => f.id === requestId);
     
     if (requestIndex === -1) {
@@ -349,10 +321,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     
-    // Remove the request
     mockFriendships.splice(requestIndex, 1);
     
-    // Reload friend requests
     if (user) {
       loadFriendsAndRequests(user.id);
     }
