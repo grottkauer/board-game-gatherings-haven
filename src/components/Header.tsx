@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
@@ -59,7 +59,11 @@ const Header = () => {
               <PopoverTrigger asChild>
                 <Button variant="ghost" className="p-0">
                   <Avatar className="h-8 w-8 bg-board-purple text-white hover:bg-board-purple-dark transition-colors">
-                    <AvatarFallback>{getInitials(user.nickname)}</AvatarFallback>
+                    {user.photoUrl ? (
+                      <AvatarImage src={user.photoUrl} alt={user.nickname} />
+                    ) : (
+                      <AvatarFallback>{getInitials(user.nickname)}</AvatarFallback>
+                    )}
                   </Avatar>
                 </Button>
               </PopoverTrigger>
@@ -70,9 +74,9 @@ const Header = () => {
                 </div>
                 <Separator className="my-2" />
                 <div className="flex flex-col gap-2">
-                  <Link to="/profile" className="flex items-center gap-2 text-sm hover:text-board-purple transition-colors">
+                  <Link to="/user-profile" className="flex items-center gap-2 text-sm hover:text-board-purple transition-colors">
                     <User className="h-4 w-4" />
-                    Profile
+                    User Profile
                   </Link>
                   <Link to="/my-events" className="flex items-center gap-2 text-sm hover:text-board-purple transition-colors">
                     <Users className="h-4 w-4" />
@@ -129,7 +133,11 @@ const Header = () => {
                 <>
                   <div className="flex items-center gap-2 py-2">
                     <Avatar className="h-8 w-8 bg-board-purple text-white">
-                      <AvatarFallback>{getInitials(user.nickname)}</AvatarFallback>
+                      {user.photoUrl ? (
+                        <AvatarImage src={user.photoUrl} alt={user.nickname} />
+                      ) : (
+                        <AvatarFallback>{getInitials(user.nickname)}</AvatarFallback>
+                      )}
                     </Avatar>
                     <div>
                       <p className="font-medium">{user.nickname}</p>
@@ -137,12 +145,12 @@ const Header = () => {
                     </div>
                   </div>
                   <Link 
-                    to="/profile" 
+                    to="/user-profile" 
                     className="flex items-center gap-2 text-sm hover:text-board-purple transition-colors py-2"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User className="h-4 w-4" />
-                    Profile
+                    User Profile
                   </Link>
                   <Link 
                     to="/my-events" 

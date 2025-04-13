@@ -4,7 +4,16 @@ export interface User {
   email: string;
   nickname: string;
   city: string;
+  photoUrl?: string;
   isLoggedIn: boolean;
+}
+
+export interface FriendRequest {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  status: "pending" | "accepted" | "declined";
+  sender: User;
 }
 
 export interface Game {

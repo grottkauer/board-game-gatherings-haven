@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import EventDetail from "./pages/EventDetail";
 import CreateEvent from "./pages/CreateEvent";
 import MyEvents from "./pages/MyEvents";
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/user-profile" element={<UserProfile />} />
                 <Route path="/events/:eventId" element={<EventDetail />} />
                 <Route path="/create-event" element={<CreateEvent />} />
                 <Route path="/my-events" element={<MyEvents />} />
